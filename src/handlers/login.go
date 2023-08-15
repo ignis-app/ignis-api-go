@@ -18,7 +18,7 @@ import (
 
 func Login(client *mongo.Client) func (c *gin.Context) {
 	return func (c *gin.Context) {
-		var body bindings.LoginR
+		var body bindings.Login
 		if err := c.ShouldBindJSON(&body); err != nil {
 			c.Status(http.StatusBadRequest)
 			return
