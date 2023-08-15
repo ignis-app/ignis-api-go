@@ -46,6 +46,7 @@ func Login(client *mongo.Client) func (c *gin.Context) {
 		}
 		key := base64.RawURLEncoding.EncodeToString(keyInt.Bytes())
 
+		coll = client.Database("bonfire").Collection("sessions")
 		// If workers are implemented, change the argument of Snowflake here.
 		_, err := coll.InsertOne(c, bson.D{
 			{Key: "_id", Value: util.Snowflake(0)},

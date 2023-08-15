@@ -37,5 +37,6 @@ func main() {
 	router := gin.Default()
 
 	router.POST("/login", handlers.Login(client))
+	router.POST("/logout", handlers.Logout(client))
 	router.Run("localhost:8000")
 }
