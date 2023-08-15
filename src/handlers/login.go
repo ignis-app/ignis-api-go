@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"bonfire/src/bindings"
+	"bonfire/src/structs"
 	"bonfire/src/util"
 
 	"net/http"
@@ -18,23 +18,23 @@ import (
 
 func Login(client *mongo.Client) func (c *gin.Context) {
 	return func (c *gin.Context) {
-		var body bindings.Login
+		var body structs.Login
 		if err := c.ShouldBindJSON(&body); err != nil {
 			c.Status(http.StatusBadRequest)
 			return
 		}
 
-		var result bson.M
+		var user structs.User
 		coll := client.Database("bonfire").Collection("users")
 		
-		if err := coll.FindOne(c, bson.M{"email": body.Email}).Decode(&result); err == mongo.ErrNoDocuments {
+		if err := coll.FindOne(c, bson.M{"email": body.Email}).Decode(&user); err == mongo.ErrNoDocuments {
 			c.Status(http.StatusUnauthorized)
 			return
 		} else if err != nil {
 			panic(err)
 		}
 		
-		var hash []byte = []byte(result["password"].(string))
+		var hash []byte = []byte(user.Password)
 		if err := bcrypt.CompareHashAndPassword(hash, []byte(body.Password)); err != nil {
 			c.Status(http.StatusUnauthorized)
 			return
@@ -50,7 +50,7 @@ func Login(client *mongo.Client) func (c *gin.Context) {
 		// If workers are implemented, change the argument of Snowflake here.
 		_, err := coll.InsertOne(c, bson.D{
 			{Key: "_id", Value: util.Snowflake(0)},
-			{Key: "userid", Value: result["id"].(int)},
+			{Key: "userid", Value: user.Id},
 			{Key: "key", Value: key},
 		})
 		if err != nil {
