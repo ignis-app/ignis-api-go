@@ -26,7 +26,13 @@ func Auth(client *mongo.Client) func (c *gin.Context) {
 		} else if err != nil {
 			panic(err)
 		}
+		var res structs.User
 		coll = client.Database("bonfire").Collection("users")
-		
+		if err := coll.FindOne(c, bson.M{"_id": ses.UserId}).Decode(&res); err != nil {
+			panic(err)
+		}
+		c.Set("loggedIn", true)
+		c.Set("user", res)
+		c.Next()
 	}	
 }

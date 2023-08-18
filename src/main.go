@@ -2,6 +2,7 @@ package main
 
 import (
 	"bonfire/src/handlers"
+	"bonfire/src/middleware"
 
 	"context"
 	"fmt"
@@ -35,7 +36,7 @@ func main() {
 	}()
 
 	router := gin.Default()
-
+	router.Use(middleware.Auth(client))
 	router.POST("/login", handlers.Login(client))
 	router.POST("/logout", handlers.Logout(client))
 	router.Run("localhost:8000")
