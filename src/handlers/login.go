@@ -6,9 +6,6 @@ import (
 
 	"net/http"
 	"os"
-	"crypto/rand"
-	"encoding/base64"
-	"math/big"
 
 	"golang.org/x/crypto/bcrypt"
 	"github.com/gin-gonic/gin"
@@ -39,12 +36,8 @@ func Login(client *mongo.Client) func (c *gin.Context) {
 			c.Status(http.StatusUnauthorized)
 			return
 		}
-
-		keyInt, keyErr := rand.Int(rand.Reader, big.NewInt(4294967296))
-		if keyErr != nil {
-			panic(keyErr)
-		}
-		key := base64.RawURLEncoding.EncodeToString(keyInt.Bytes())
+		
+		key := util.SessionKey()
 
 		coll = client.Database("bonfire").Collection("sessions")
 		// If workers are implemented, change the argument of Snowflake here.

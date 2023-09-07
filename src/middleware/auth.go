@@ -14,6 +14,7 @@ func Auth(client *mongo.Client) func (c *gin.Context) {
 	return func (c *gin.Context) {
 		seskey, err := c.Cookie("session")
 		if err != nil {
+			c.Set("loggedIn", false)
 			c.Next()
 			return
 		}
@@ -21,6 +22,7 @@ func Auth(client *mongo.Client) func (c *gin.Context) {
 		coll := client.Database("bonfire").Collection("sessions")
 		if err := coll.FindOne(c, bson.M{"key": seskey}).Decode(&ses); err == mongo.ErrNoDocuments {
 			c.SetCookie("session", "", -1, "/", os.Getenv("DOMAIN"), true, true)
+			c.Set("loggedIn", false)
 			c.Next()
 			return
 		} else if err != nil {
@@ -32,6 +34,7 @@ func Auth(client *mongo.Client) func (c *gin.Context) {
 			panic(err)
 		}
 		c.Set("loggedIn", true)
+		c.Set("sessionKey", ses.Key)
 		c.Set("user", res)
 		c.Next()
 	}	
