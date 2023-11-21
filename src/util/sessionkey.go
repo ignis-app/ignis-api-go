@@ -7,9 +7,9 @@ import (
 )
 
 func SessionKey() string {
-	keyInt, keyErr := rand.Int(rand.Reader, big.NewInt(4294967296))
-	if keyErr != nil {
-		panic(keyErr)
+	keyInt, err := rand.Int(rand.Reader, big.NewInt(4294967296))
+	if err != nil {
+		panic(err)
 	}
 	key := base64.RawURLEncoding.EncodeToString(keyInt.Bytes())
 	return key

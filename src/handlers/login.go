@@ -16,7 +16,7 @@ import (
 func Login(client *mongo.Client) func (c *gin.Context) {
 	return func (c *gin.Context) {
 		var body structs.Login
-		if err := c.ShouldBindJSON(&body); err != nil {
+		if c.ShouldBindJSON(&body) != nil {
 			c.Status(http.StatusBadRequest)
 			return
 		}
@@ -24,7 +24,8 @@ func Login(client *mongo.Client) func (c *gin.Context) {
 		var user structs.User
 		coll := client.Database("bonfire").Collection("users")
 		
-		if err := coll.FindOne(c, bson.M{"email": body.Email}).Decode(&user); err == mongo.ErrNoDocuments {
+		err := coll.FindOne(c, bson.M{"email": body.Email}).Decode(&user)
+		if err == mongo.ErrNoDocuments {
 			c.Status(http.StatusUnauthorized)
 			return
 		} else if err != nil {
@@ -32,7 +33,8 @@ func Login(client *mongo.Client) func (c *gin.Context) {
 		}
 		
 		var hash []byte = []byte(user.Password)
-		if err := bcrypt.CompareHashAndPassword(hash, []byte(body.Password)); err != nil {
+		err = bcrypt.CompareHashAndPassword(hash, []byte(body.Password))
+		if err != nil {
 			c.Status(http.StatusUnauthorized)
 			return
 		}
@@ -41,7 +43,7 @@ func Login(client *mongo.Client) func (c *gin.Context) {
 
 		coll = client.Database("bonfire").Collection("sessions")
 		// If workers are implemented, change the argument of Snowflake here.
-		_, err := coll.InsertOne(c, bson.D{
+		_, err = coll.InsertOne(c, bson.D{
 			{Key: "_id", Value: util.Snowflake(0)},
 			{Key: "userid", Value: user.Id},
 			{Key: "key", Value: key},
@@ -51,6 +53,6 @@ func Login(client *mongo.Client) func (c *gin.Context) {
 		}
 
 		c.SetCookie("session", key, 604800, "/", os.Getenv("DOMAIN"), true, true)
-		c.Status(http.StatusAccepted)
+		c.Status(http.StatusOK)
 	}
 }

@@ -6,9 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/bson"
 )
-
-func get()
 
 func Users(client *mongo.Client) func (c *gin.Context) {
 	return func (c *gin.Context) {
@@ -16,8 +15,24 @@ func Users(client *mongo.Client) func (c *gin.Context) {
 			c.Status(http.StatusUnauthorized)
 			return
 		}
-		coll := client.Database("bonfire").Collection("users")
+		id := c.Query("id")
+
 		var user structs.User
-		if _, err := coll.FindOne(c, bson.M{"_id", })
+		coll := client.Database("bonfire").Collection("users")
+
+		err := coll.FindOne(c, bson.M{"_id": id}).Decode(&user)
+		if err == mongo.ErrNoDocuments {
+			c.Status(http.StatusNotFound)
+			return
+		} else if err != nil {
+			panic(err)
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"id": user.Id,
+			"username": user.Username,
+			"profile": user.Profile,
+			"creationdate": user.CreationDate,
+		})
 	}
 }

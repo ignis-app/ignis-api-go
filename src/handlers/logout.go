@@ -12,14 +12,15 @@ import (
 func Logout(client *mongo.Client) func (c *gin.Context) {
 	return func (c *gin.Context) {
 		if !c.GetBool("loggedIn") {
-			c.Status(http.StatusAccepted)
+			c.Status(http.StatusOK)
 			return
 		}
 		coll := client.Database("bonfire").Collection("sessions")
-		if _, err := coll.DeleteOne(c, bson.M{"key": c.GetString("sessionKey")}); err != nil {
+		_, err := coll.DeleteOne(c, bson.M{"key": c.GetString("sessionKey")})
+		if err != nil {
 			panic(err)
 		}
 		c.SetCookie("session", "", -1, "/", os.Getenv("DOMAIN"), true, true)
-		c.Status(http.StatusAccepted)
+		c.Status(http.StatusOK)
 	}
 }
