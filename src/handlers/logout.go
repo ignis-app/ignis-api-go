@@ -1,13 +1,10 @@
 package handlers
 
-import (
-	"net/http"
-	"os"
-
-	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-)
+import "net/http"
+import "os"
+import "github.com/gin-gonic/gin"
+import "go.mongodb.org/mongo-driver/bson"
+import "go.mongodb.org/mongo-driver/mongo"
 
 func Logout(client *mongo.Client) func (c *gin.Context) {
 	return func (c *gin.Context) {

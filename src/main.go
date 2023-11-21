@@ -1,18 +1,14 @@
 package main
 
-import (
-	"bonfire/src/handlers"
-	"bonfire/src/middleware"
-
-	"context"
-	"fmt"
-	"os"
-
-	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-)
+import "bonfire/src/handlers"
+import "bonfire/src/middleware"
+import "context"
+import "fmt"
+import "os"
+import "github.com/gin-gonic/gin"
+import "github.com/joho/godotenv"
+import "go.mongodb.org/mongo-driver/mongo"
+import "go.mongodb.org/mongo-driver/mongo/options"
 
 func main() {
 	if err := godotenv.Load(); err != nil {

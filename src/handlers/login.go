@@ -1,17 +1,13 @@
 package handlers
 
-import (
-	"bonfire/src/structs"
-	"bonfire/src/util"
-
-	"net/http"
-	"os"
-
-	"golang.org/x/crypto/bcrypt"
-	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-)
+import "bonfire/src/structs"
+import "bonfire/src/util"
+import "net/http"
+import "os"
+import "golang.org/x/crypto/bcrypt"
+import "github.com/gin-gonic/gin"
+import "go.mongodb.org/mongo-driver/bson"
+import "go.mongodb.org/mongo-driver/mongo"
 
 func Login(client *mongo.Client) func (c *gin.Context) {
 	return func (c *gin.Context) {

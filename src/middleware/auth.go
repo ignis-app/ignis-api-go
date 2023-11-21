@@ -1,13 +1,10 @@
 package middleware
 
-import (
-	"bonfire/src/structs"
-	"os"
-
-	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-)
+import "bonfire/src/structs"
+import "os"
+import "github.com/gin-gonic/gin"
+import "go.mongodb.org/mongo-driver/bson"
+import "go.mongodb.org/mongo-driver/mongo"
 
 // Caching might be good for this one.
 func Auth(client *mongo.Client) func (c *gin.Context) {

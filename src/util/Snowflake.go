@@ -1,9 +1,7 @@
 package util
 
-import (
-	"time"
-	"os"
-)
+import "time"
+import "os"
 
 var INCR int64 = 0
 

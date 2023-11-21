@@ -1,10 +1,8 @@
 package util
 
-import (
-	"crypto/rand"
-	"math/big"
-	"encoding/base64"
-)
+import "crypto/rand"
+import "math/big"
+import "encoding/base64"
 
 func SessionKey() string {
 	keyInt, err := rand.Int(rand.Reader, big.NewInt(4294967296))
