@@ -1,4 +1,4 @@
-module bonfire
+module ignis
 
 go 1.21.0
 

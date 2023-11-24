@@ -1,7 +1,7 @@
 package handlers
 
-import "bonfire/src/structs"
-import "bonfire/src/util"
+import "ignis/src/structs"
+import "ignis/src/util"
 import "net/http"
 import "os"
 import "golang.org/x/crypto/bcrypt"

@@ -1,6 +1,6 @@
 package middleware
 
-import "bonfire/src/structs"
+import "ignis/src/structs"
 import "os"
 import "github.com/gin-gonic/gin"
 import "go.mongodb.org/mongo-driver/bson"
@@ -16,7 +16,7 @@ func Auth(client *mongo.Client) func (c *gin.Context) {
 			return
 		}
 		var ses structs.Session
-		coll := client.Database("bonfire").Collection("sessions")
+		coll := client.Database("ignis").Collection("sessions")
 		err = coll.FindOne(c, bson.M{"key": seskey}).Decode(&ses)
 		if err == mongo.ErrNoDocuments {
 			c.SetCookie("session", "", -1, "/", os.Getenv("DOMAIN"), true, true)
@@ -27,7 +27,7 @@ func Auth(client *mongo.Client) func (c *gin.Context) {
 			panic(err)
 		}
 		var res structs.User
-		coll = client.Database("bonfire").Collection("users")
+		coll = client.Database("ignis").Collection("users")
 		if coll.FindOne(c, bson.M{"_id": ses.UserId}).Decode(&res) != nil {
 			panic(err)
 		}

@@ -1,6 +1,6 @@
 package handlers
 
-import "bonfire/src/structs"
+import "ignis/src/structs"
 import "net/http"
 import "github.com/gin-gonic/gin"
 import "go.mongodb.org/mongo-driver/mongo"

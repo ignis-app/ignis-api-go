@@ -1,7 +1,7 @@
 package main
 
-import "bonfire/src/handlers"
-import "bonfire/src/middleware"
+import "ignis/src/handlers"
+import "ignis/src/middleware"
 import "context"
 import "fmt"
 import "os"
