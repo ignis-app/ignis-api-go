@@ -6,13 +6,13 @@ import "github.com/gin-gonic/gin"
 import "go.mongodb.org/mongo-driver/bson"
 import "go.mongodb.org/mongo-driver/mongo"
 
-func Logout(client *mongo.Client) func (c *gin.Context) {
+func Logout(client *mongo.Client) gin.HandlerFunc {
 	return func (c *gin.Context) {
 		if !c.GetBool("loggedIn") {
 			c.Status(http.StatusOK)
 			return
 		}
-		coll := client.Database("bonfire").Collection("sessions")
+		coll := client.Database("ignis").Collection("sessions")
 		_, err := coll.DeleteOne(c, bson.M{"key": c.GetString("sessionKey")})
 		if err != nil {
 			panic(err)

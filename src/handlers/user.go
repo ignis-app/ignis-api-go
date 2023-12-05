@@ -6,16 +6,12 @@ import "github.com/gin-gonic/gin"
 import "go.mongodb.org/mongo-driver/mongo"
 import "go.mongodb.org/mongo-driver/bson"
 
-func Users(client *mongo.Client) func (c *gin.Context) {
+func User(client *mongo.Client) gin.HandlerFunc {
 	return func (c *gin.Context) {
-		if !c.GetBool("loggedIn") {
-			c.Status(http.StatusUnauthorized)
-			return
-		}
-		id := c.Query("id")
+		id := c.Query("username")
 
 		var user structs.User
-		coll := client.Database("bonfire").Collection("users")
+		coll := client.Database("ignis").Collection("users")
 
 		err := coll.FindOne(c, bson.M{"_id": id}).Decode(&user)
 		if err == mongo.ErrNoDocuments {

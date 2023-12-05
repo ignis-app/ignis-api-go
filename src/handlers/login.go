@@ -9,7 +9,8 @@ import "github.com/gin-gonic/gin"
 import "go.mongodb.org/mongo-driver/bson"
 import "go.mongodb.org/mongo-driver/mongo"
 
-func Login(client *mongo.Client) func (c *gin.Context) {
+
+func Login(client *mongo.Client) gin.HandlerFunc {
 	return func (c *gin.Context) {
 		var body structs.Login
 		if c.ShouldBindJSON(&body) != nil {
@@ -18,7 +19,7 @@ func Login(client *mongo.Client) func (c *gin.Context) {
 		}
 
 		var user structs.User
-		coll := client.Database("bonfire").Collection("users")
+		coll := client.Database("ignis").Collection("users")
 		
 		err := coll.FindOne(c, bson.M{"email": body.Email}).Decode(&user)
 		if err == mongo.ErrNoDocuments {
@@ -37,7 +38,7 @@ func Login(client *mongo.Client) func (c *gin.Context) {
 		
 		key := util.SessionKey()
 
-		coll = client.Database("bonfire").Collection("sessions")
+		coll = client.Database("ignis").Collection("sessions")
 		// If workers are implemented, change the argument of Snowflake here.
 		_, err = coll.InsertOne(c, bson.D{
 			{Key: "_id", Value: util.Snowflake(0)},
